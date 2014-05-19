@@ -20,4 +20,5 @@ bin/*
 .kitchen/
 .kitchen.local.yml
 
-.idea
+/.idea/*
+!/.idea/dictionaries
