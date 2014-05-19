@@ -8,15 +8,17 @@ describe 'CommandLwrp' do
   before {
     stub_resources
     temp_lwrp_recipe "package 'blah'"
+    RSpec.configure do |config|
+      config.cookbook_path = [*config.cookbook_path] << File.join(File.dirname(__FILE__), 'gen_cookbooks')
+    end
+    @chef_run = ChefSpec::Runner.new do |node|
+        node.set['naemon']['server']['packages'] = ['bib']
+      end.converge('foo::default')
   }
 
   after(:each) {
     #cleanup
   }
-
-  let(:chef_run) { ChefSpec::Runner.new(cookpath_path: File.join(File.dirname(__FILE__), 'gen_cookbooks'),step_into: ['naemon_command']) do |node|
-    node.set['naemon']['server']['packages'] = ['bib']
-  end.converge('foo::default') }
 
   it 'sets up the template to be done at the end of the chef run' do
     # arrange
@@ -24,7 +26,7 @@ describe 'CommandLwrp' do
     # act
 
     # assert
-    expect(chef_run).to install_package('blah')
+    expect(@chef_run).to install_package('blah')
     pending 'Write this test'
   end
 
