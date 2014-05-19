@@ -1,8 +1,8 @@
-name             '../standalone_cookbooks/naemon'
-maintainer       'YOUR_NAME'
-maintainer_email 'YOUR_EMAIL'
-license          'All rights reserved'
-description      'Installs/Configures ../standalone_cookbooks/naemon'
-long_description 'Installs/Configures ../standalone_cookbooks/naemon'
+# Encoding: utf-8
+name             'naemon'
+maintainer       'BSW Technology Consulting'
+maintainer_email 'support@bswtechconsulting.com'
+license          ''
+description      'Installs/Configures naemon'
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
-

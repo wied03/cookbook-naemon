@@ -40,6 +40,7 @@
     <orderEntry type="library" scope="PROVIDED" name="mixlib-shellout (v1.4.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multipart-post (v2.0.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-http-persistent (v2.9.4, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="net-scp (v1.2.1, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-ssh (v2.9.1, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-ssh-gateway (v1.2.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-ssh-multi (v1.2.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
@@ -48,6 +49,7 @@
     <orderEntry type="library" scope="PROVIDED" name="ohai (v7.0.4, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pry (v0.9.12.6, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack (v1.5.2, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.3.1, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rest-client (v1.6.7, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="retryable (v1.3.5, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ridley (v3.1.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
@@ -55,11 +57,13 @@
     <orderEntry type="library" scope="PROVIDED" name="rspec-core (v2.14.8, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v2.14.5, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v2.14.6, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="safe_yaml (v1.0.3, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sawyer (v0.5.4, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="semverse (v1.1.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="slop (v3.5.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="solve (v1.2.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="systemu (v2.5.2, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="test-kitchen (v1.2.1, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.1, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="timers (v2.0.0, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="varia_model (v0.3.2, RVM: ruby-2.1.1 [config_mgmt]) [gem]" level="application" />

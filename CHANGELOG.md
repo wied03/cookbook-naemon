@@ -1,9 +1,13 @@
-# 0.1.0
+naemon CHANGELOG
+================
 
-Initial release of ../standalone_cookbooks/naemon
+This file is used to list changes made in each version of the naemon cookbook.
 
-* Enhancements
-  * an enhancement
+0.1.0
+-----
+- [your_name] - Initial release of naemon
 
-* Bug Fixes
-  * a bug fix
+- - -
+Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
+
+The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
