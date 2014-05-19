@@ -7,17 +7,23 @@ describe 'naemon::lwrp:command' do
 
   before {
     stub_resources
-    temp_lwrp_recipe contents:"package 'blah'" do
-        ChefSpec::Runner.new
-    end
   }
 
   after(:each) {
     cleanup
   }
 
+  def cookbook_under_test
+    'naemon'
+  end
+
+  def lwrp_under_test
+    'command'
+  end
+
   it 'sets up the template to be done at the end of the chef run' do
     # arrange
+    temp_lwrp_recipe contents: 'naemon_command "this is my command"'
 
     # act
 

@@ -15,13 +15,13 @@ module BswTech
         'lwrp_gen'
       end
 
-      def temp_lwrp_recipe(contents:)
+      def temp_lwrp_recipe(contents:,runner_options:{})
         create_temp_cookbook(contents)
         RSpec.configure do |config|
           config.cookbook_path = [*config.cookbook_path] << generated_cookbook_path
         end
-        raise 'Must supply a block that creates the runner' unless block_given?
-        @chef_run = yield
+        lwrp_full = "#{cookbook_under_test}_#{lwrp_under_test}"
+        @chef_run = ::ChefSpec::Runner.new(runner_options.merge(step_into:[lwrp_full]))
         @chef_run.converge("#{generated_cookbook_name}::default")
       end
 
@@ -35,6 +35,7 @@ module BswTech
         File.open File.join(the_path, 'metadata.rb'), 'w' do |f|
           f << "name '#{generated_cookbook_name}'\n"
           f << "version '0.0.1'\n"
+          f << "depends '#{cookbook_under_test}'\n"
         end
       end
 
