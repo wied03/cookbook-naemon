@@ -2,6 +2,7 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
 require 'chef/application'
+require File.join(File.dirname(__FILE__),'lwrp_helper')
 
 ::LOG_LEVEL = :fatal
 ::UBUNTU_OPTS = {
@@ -17,3 +18,4 @@ def stub_resources
 end
 
 at_exit { ChefSpec::Coverage.report! }
+
