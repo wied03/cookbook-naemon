@@ -2,7 +2,7 @@
 
 require_relative 'spec_helper'
 
-describe 'CommandLwrp' do
+describe 'naemon::lwrp:command' do
   include BswTech::ChefSpec::LwrpTestHelper
 
   before {
