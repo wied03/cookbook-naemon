@@ -2,6 +2,12 @@
 
 require_relative 'spec_helper'
 
+RSpec::Matchers.define :match_irrespective_of_whitespace do |expected|
+  match do |actual|
+     actual.should == expected
+  end
+end
+
 describe 'naemon::lwrp:command' do
   include BswTech::ChefSpec::LwrpTestHelper
 
@@ -35,19 +41,16 @@ describe 'naemon::lwrp:command' do
         end
     EOF
 
-    # act
-    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(<<-EOF
+    # act + assert
+
+    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
+<<EOF
 define command {
-   command_name the_command
-   command_line /etc/do_stuff
+  command_name the_command
+  command_line /etc/do_stuff
 }
 EOF
-                         )
-
-    # act
-
-    # assert
-    pending 'Write this test'
+)
   end
 
   it 'works properly with multiple commands' do
