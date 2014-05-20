@@ -5,5 +5,8 @@ end
 use_inline_resources
 
 action :create_or_update do
-  fail 'we ran the commmand, whew!'
+  template '/etc/naemon/commands.cfg' do
+    cookbook 'naemon'
+    variables :resource => new_resource
+  end
 end

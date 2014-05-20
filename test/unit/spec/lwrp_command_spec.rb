@@ -22,18 +22,27 @@ describe 'naemon::lwrp:command' do
   end
 
   it 'sets up the template to be done at the end of the chef run' do
-    # arrange
-    temp_lwrp_recipe contents: 'naemon_command "this is my command"'
-
-    # act
-
     # assert
-    expect(@chef_run).to install_package('blah2')
+
     pending 'Write this test'
   end
 
   it 'works properly with 1 command' do
     # arrange
+    temp_lwrp_recipe contents: <<-EOF
+        naemon_command 'the_command' do
+          command_line '/etc/do_stuff'
+        end
+    EOF
+
+    # act
+    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(<<-EOF
+define command {
+   command_name the_command
+   command_line /etc/do_stuff
+}
+EOF
+                         )
 
     # act
 
