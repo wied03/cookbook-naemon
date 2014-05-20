@@ -1,4 +1,7 @@
+<% @resources.each do |r| %>
 define command {
-  command_name <%=@resource.name%>
-  command_line <%=@resource.command_line%>
+  command_name <%=r.name%>
+  command_line <%=r.command_line%>
 }
+
+<% end %>

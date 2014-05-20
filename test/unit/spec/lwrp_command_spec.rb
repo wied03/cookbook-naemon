@@ -2,12 +2,6 @@
 
 require_relative 'spec_helper'
 
-RSpec::Matchers.define :match_irrespective_of_whitespace do |expected|
-  match do |actual|
-     actual.should == expected
-  end
-end
-
 describe 'naemon::lwrp:command' do
   include BswTech::ChefSpec::LwrpTestHelper
 
@@ -29,37 +23,72 @@ describe 'naemon::lwrp:command' do
 
   it 'sets up the template to be done at the end of the chef run' do
     # assert
+    temp_lwrp_recipe contents: <<-EOF
+            naemon_command 'the_command' do
+              command_line '/etc/do_stuff'
+            end
+    EOF
 
-    pending 'Write this test'
+    # act + assert
+    resource = @chef_run.find_resource('naemon_command','the_command')
+    expect(resource).to notify('naemon_command[apply]').to(:apply).delayed
   end
 
   it 'works properly with 1 command' do
     # arrange
+    # TODO: Add a helper method that adds the 'apply' in automatically
     temp_lwrp_recipe contents: <<-EOF
         naemon_command 'the_command' do
           command_line '/etc/do_stuff'
+        end
+        # Simulate an immediate apply in order to test the template
+        naemon_command 'application' do
+          action :apply
         end
     EOF
 
     # act + assert
 
     expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
-<<EOF
+                             <<EOF
 define command {
   command_name the_command
   command_line /etc/do_stuff
 }
 EOF
-)
+                         )
   end
 
   it 'works properly with multiple commands' do
     # arrange
+    temp_lwrp_recipe contents: <<-EOF
+            naemon_command 'the_command 1' do
+              command_line '/etc/do_stuff'
+            end
 
-    # act
+            naemon_command 'the_command 2' do
+              command_line '/etc/do_different_stuff'
+            end
+            # Simulate an immediate apply in order to test the template
+            naemon_command 'application' do
+              action :apply
+            end
+    EOF
 
-    # assert
-    pending 'Write this test'
+    # act + assert
 
+    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
+                             <<EOF
+define command {
+  command_name the_command 1
+  command_line /etc/do_stuff
+}
+
+define command {
+  command_name the_command 2
+  command_line /etc/do_different_stuff
+}
+EOF
+                         )
   end
 end
