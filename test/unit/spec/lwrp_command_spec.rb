@@ -17,7 +17,7 @@ describe 'naemon::lwrp:command' do
     'naemon'
   end
 
-  def lwrp_under_test
+  def lwrps_under_test
     'command'
   end
 

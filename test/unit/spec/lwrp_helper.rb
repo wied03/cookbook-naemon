@@ -20,8 +20,10 @@ module BswTech
         RSpec.configure do |config|
           config.cookbook_path = [*config.cookbook_path] << generated_cookbook_path
         end
-        lwrp_full = "#{cookbook_under_test}_#{lwrp_under_test}"
-        @chef_run = ::ChefSpec::Runner.new(runner_options.merge(step_into:[lwrp_full]))
+        lwrps_full = [*lwrps_under_test].map do |lwrp|
+          "#{cookbook_under_test}_#{lwrp}"
+        end
+        @chef_run = ::ChefSpec::Runner.new(runner_options.merge(step_into:lwrps_full))
         @chef_run.converge("#{generated_cookbook_name}::default")
       end
 

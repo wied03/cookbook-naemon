@@ -17,8 +17,8 @@ describe 'naemon::lwrp:role' do
     'naemon'
   end
 
-  def lwrp_under_test
-    'role'
+  def lwrps_under_test
+    ['role','service']
   end
 
   def setup_recipe(contents:)

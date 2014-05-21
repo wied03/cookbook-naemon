@@ -17,7 +17,7 @@ describe 'naemon::lwrp:service' do
     'naemon'
   end
 
-  def lwrp_under_test
+  def lwrps_under_test
     'service'
   end
 
