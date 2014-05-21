@@ -3,6 +3,6 @@ define service {
   host_name <%=host%>
   check_command <%=check_command%>
 <% if [*service_groups].any? %>
-  servicegroups <%=service_groups%>
+  servicegroups <%=[*service_groups].join(',')%>
 <% end %>
 }

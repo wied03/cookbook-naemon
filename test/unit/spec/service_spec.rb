@@ -54,8 +54,8 @@ EOF
     EOF
 
     # act + assert
-        resource = @chef_run.find_resource('naemon_service', 'the service')
-        expect(resource.rendered_service).to eq(<<EOF
+    resource = @chef_run.find_resource('naemon_service', 'the service')
+    expect(resource.rendered_service).to eq(<<EOF
 define service {
   service_description the service
   host_name host2
@@ -70,11 +70,27 @@ EOF
 
   it 'works properly when a member of multiple service groups' do
     # arrange
+    temp_lwrp_recipe contents: <<-EOF
+                naemon_service 'the service' do
+                  host 'host2'
+                  check_command 'the_command2'
+                  service_groups ['group2', 'group1']
+                end
+    EOF
 
-    # act
+    # act + assert
+    resource = @chef_run.find_resource('naemon_service', 'the service')
+    expect(resource.rendered_service).to eq(<<EOF
+define service {
+  service_description the service
+  host_name host2
+  check_command the_command2
 
-    # assert
-    pending 'Write this test'
+  servicegroups group2,group1
+
+}
+EOF
+                                             )
   end
 
   it 'works properly when variables are supplied' do
@@ -112,6 +128,6 @@ define command {
   command_line /etc/do_different_stuff
 }
 EOF
-                         )
+                                         )
   end
 end
