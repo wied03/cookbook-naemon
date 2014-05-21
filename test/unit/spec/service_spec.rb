@@ -47,7 +47,7 @@ describe 'naemon::lwrp:service' do
     # act + assert
     resource = @chef_run.find_resource('naemon_service', 'the service')
     puts "provider is #{resource.inspect}"
-    expect(resource.rendered_service).to equal(<<EOF
+    expect(resource.rendered_service).to eq(<<EOF
 define service {
   service_description the service
   host_name host2
