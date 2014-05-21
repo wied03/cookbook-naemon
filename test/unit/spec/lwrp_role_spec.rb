@@ -18,13 +18,13 @@ describe 'naemon::lwrp:role' do
   end
 
   def lwrps_under_test
-    ['role','service']
+    'role'
   end
 
   def setup_recipe(contents:)
     temp_lwrp_recipe contents: contents + <<-EOF
       # Simulate an immediate apply in order to test the template
-      naemon_service 'application' do
+      naemon_role 'application' do
         action :apply
       end
     EOF
@@ -42,169 +42,64 @@ describe 'naemon::lwrp:role' do
     EOF
 
     # act + assert
-    # TODO: Re-enable these 2 tests
-    #resource = @chef_run.find_resource('naemon_role', 'chef role blah')
-    #expect(resource).to notify('naemon_role[apply]').to(:apply).delayed
-    svc_resource = @chef_run.find_resource('naemon_service', 'naemon svc desc')
-    expect(svc_resource).to_not be_nil
-    expect(svc_resource.check_command).to eq('the_command2')
-    expect(svc_resource).to notify('naemon_service[apply]').to(:apply).delayed
-    # TODO: Test that we query who's in the role and repeat this process for each node
+    resource = @chef_run.find_resource('naemon_role', 'chef role blah')
+    expect(resource).to notify('naemon_role[apply]').to(:apply).delayed
   end
 
-  it 'works properly with 1 service' do
+  it 'works properly with 1 host, 1 role, 1 service' do
     # arrange
+    stub_search(:node, 'role:db').and_return([{:hostname => 'host1.stuff.com'}])
     setup_recipe contents: <<-EOF
-        naemon_service 'the service' do
-          host 'host2'
-          check_command 'the_command2'
+        naemon_role 'chef role blah' do
+          roles 'db'
+          service 'naemon svc desc' do
+            check_command 'the_command2'
+          end
         end
     EOF
 
     # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
+    svc_resource = @chef_run.find_resource('naemon_service', 'naemon svc desc')
+    expect(svc_resource).to_not be_nil
+    expect(svc_resource.check_command).to eq('the_command2')
+    expect(svc_resource.host).to eq('host1.stuff.com')
+    expect(@chef_run).to render_file('/etc/naemon/conf.d/hosts.cfg').with_content(<<EOF
+define host {
+  alias The Box
+  host_name host1.stuff.com
+  address 172.16.0.1
 }
 EOF
-                                         )
+                         )
+    # TODO: Test that we query who's in the role and repeat this process for each node
+
+    pending 'fix this'
   end
 
-  it 'works properly when a member of a service group' do
+  it 'works properly with 2 hosts in 1 role and 2 services' do
     # arrange
-    setup_recipe contents: <<-EOF
-            naemon_service 'the service' do
-              host 'host2'
-              check_command 'the_command2'
-              service_groups 'group1'
-            end
-    EOF
 
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  servicegroups group1
-}
-EOF
-                                         )
+    # act
+
+    # assert
+    pending 'Write this test'
   end
 
-  it 'works properly when a check interval is supplied' do
+  it 'works properly with 1 host in 2 different roles with 2 services' do
     # arrange
-    setup_recipe contents: <<-EOF
-                naemon_service 'the service' do
-                  host 'host2'
-                  check_command 'the_command2'
-                  check_interval 44
-                end
-    EOF
 
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  check_interval 44
-}
-EOF
-                                         )
+    # act
+
+    # assert
+    pending 'Write this test'
   end
 
-  it 'works properly when a member of multiple service groups' do
+  it 'works properly with 2 hosts in 2 different roles with 2 services' do
     # arrange
-    setup_recipe contents: <<-EOF
-                naemon_service 'the service' do
-                  host 'host2'
-                  check_command 'the_command2'
-                  service_groups ['group2', 'group1']
-                end
-    EOF
 
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  servicegroups group2,group1
-}
-EOF
-                                         )
-  end
+    # act
 
-  it 'works properly when 1 variable is supplied' do
-    # arrange
-    setup_recipe contents: <<-EOF
-            naemon_service 'the service' do
-              host 'host2'
-              check_command 'the_command2'
-              variables '_DB_TO_CHECK' => 'someDbName'
-            end
-    EOF
-
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  _DB_TO_CHECK someDbName
-}
-EOF
-                                         )
-  end
-
-  it 'works properly when multiple variables are supplied' do
-    # arrange
-    setup_recipe contents: <<-EOF
-                naemon_service 'the service' do
-                  host 'host2'
-                  check_command 'the_command2'
-                  variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
-                end
-    EOF
-
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  _DB_TO_CHECK someDbName
-  _IPTOCHECK 172.16.0.1
-}
-EOF
-                                         )
-  end
-
-  it 'works properly when variables and service groups are supplied' do
-    # arrange
-    setup_recipe contents: <<-EOF
-                    naemon_service 'the service' do
-                      host 'host2'
-                      check_command 'the_command2'
-                      variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
-                      service_groups ['group2', 'group1']
-                    end
-    EOF
-
-    # act + assert
-    expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
-define service {
-  service_description the service
-  host_name host2
-  check_command the_command2
-  servicegroups group2,group1
-  _DB_TO_CHECK someDbName
-  _IPTOCHECK 172.16.0.1
-}
-EOF
-                                         )
+    # assert
+    pending 'Write this test'
   end
 end
