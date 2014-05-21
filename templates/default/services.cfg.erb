@@ -1,0 +1,16 @@
+<% @resources.each do |r| %>
+define service {
+  service_description <%=r.description%>
+  host_name <%=r.host%>
+  check_command <%=r.check_command%>
+<% if [*r.service_groups].any? %>
+  servicegroups <%=[*r.service_groups].join(',')%>
+<% end %>
+<% if r.check_interval %>
+  check_interval <%=r.check_interval%>
+<% end %>
+<% (r.variables || {}).each do |k,v| %>
+  <%=k%> <%=v%>
+<% end%>
+}
+<% end %>

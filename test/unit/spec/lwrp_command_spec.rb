@@ -53,7 +53,7 @@ EOF
 
     # act + assert
 
-    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
+    expect(@chef_run).to render_file('/etc/naemon/conf.d/commands.cfg').with_content(
                              <<EOF
 define command {
   command_name the_command
@@ -77,7 +77,7 @@ EOF
 
     # act + assert
 
-    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
+    expect(@chef_run).to render_file('/etc/naemon/conf.d/commands.cfg').with_content(
                              <<EOF
 define command {
   command_name the_command 1

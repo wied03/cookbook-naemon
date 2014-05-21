@@ -16,7 +16,7 @@ action :create_or_update do
 end
 
 action :apply do
-  template '/etc/naemon/commands.cfg' do
+  template '/etc/naemon/conf.d/commands.cfg' do
     cookbook 'naemon'
     variables :resources => node.run_state[:naemon]
   end
