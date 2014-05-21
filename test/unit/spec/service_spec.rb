@@ -39,6 +39,7 @@ define service {
   check_command the_command2
 
 
+
 }
 EOF
                                          )
@@ -65,9 +66,37 @@ define service {
   servicegroups group1
 
 
+
 }
 EOF
                                          )
+  end
+
+  it 'works properly when a check interval is supplied' do
+    # arrange
+        temp_lwrp_recipe contents: <<-EOF
+                naemon_service 'the service' do
+                  host 'host2'
+                  check_command 'the_command2'
+                  check_interval 44
+                end
+        EOF
+
+        # act + assert
+        resource = @chef_run.find_resource('naemon_service', 'the service')
+        expect(resource.rendered_service).to eq(<<EOF
+define service {
+  service_description the service
+  host_name host2
+  check_command the_command2
+
+
+  check_interval 44
+
+
+}
+EOF
+                                             )
   end
 
   it 'works properly when a member of multiple service groups' do
@@ -89,6 +118,7 @@ define service {
   check_command the_command2
 
   servicegroups group2,group1
+
 
 
 }
@@ -115,6 +145,7 @@ define service {
   check_command the_command2
 
 
+
   _DB_TO_CHECK someDbName
 
 }
@@ -139,6 +170,7 @@ define service {
   service_description the service
   host_name host2
   check_command the_command2
+
 
 
   _DB_TO_CHECK someDbName
@@ -170,6 +202,7 @@ define service {
   check_command the_command2
 
   servicegroups group2,group1
+
 
 
   _DB_TO_CHECK someDbName
