@@ -21,6 +21,15 @@ describe 'naemon::lwrp:command' do
     'command'
   end
 
+  def setup_recipe(contents:)
+    temp_lwrp_recipe contents: contents + <<-EOF
+    # Simulate an immediate apply in order to test the template
+    naemon_command 'application' do
+      action :apply
+    end
+EOF
+  end
+
   it 'sets up the template to be done at the end of the chef run' do
     # assert
     temp_lwrp_recipe contents: <<-EOF
@@ -36,14 +45,9 @@ describe 'naemon::lwrp:command' do
 
   it 'works properly with 1 command' do
     # arrange
-    # TODO: Add a helper method that adds the 'apply' in automatically
-    temp_lwrp_recipe contents: <<-EOF
+    setup_recipe contents: <<-EOF
         naemon_command 'the_command' do
           command_line '/etc/do_stuff'
-        end
-        # Simulate an immediate apply in order to test the template
-        naemon_command 'application' do
-          action :apply
         end
     EOF
 
@@ -61,17 +65,13 @@ EOF
 
   it 'works properly with multiple commands' do
     # arrange
-    temp_lwrp_recipe contents: <<-EOF
+    setup_recipe contents: <<-EOF
             naemon_command 'the_command 1' do
               command_line '/etc/do_stuff'
             end
 
             naemon_command 'the_command 2' do
               command_line '/etc/do_different_stuff'
-            end
-            # Simulate an immediate apply in order to test the template
-            naemon_command 'application' do
-              action :apply
             end
     EOF
 
