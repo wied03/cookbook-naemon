@@ -38,6 +38,7 @@ define service {
   host_name host2
   check_command the_command2
 
+
 }
 EOF
                                          )
@@ -62,6 +63,7 @@ define service {
   check_command the_command2
 
   servicegroups group1
+
 
 }
 EOF
@@ -88,46 +90,94 @@ define service {
 
   servicegroups group2,group1
 
+
 }
 EOF
                                              )
   end
 
-  it 'works properly when variables are supplied' do
+  it 'works properly when 1 variable is supplied' do
     # arrange
-
-    # act
-
-    # assert
-    pending 'Write this test'
-  end
-
-  it 'works properly with multiple services' do
-    # arrange
-    temp_lwrp_recipe contents: <<-EOF
-            naemon_command 'the_command 1' do
-              command_line '/etc/do_stuff'
+        temp_lwrp_recipe contents: <<-EOF
+            naemon_service 'the service' do
+              host 'host2'
+              check_command 'the_command2'
+              variables '_DB_TO_CHECK' => 'someDbName'
             end
+        EOF
 
-            naemon_command 'the_command 2' do
-              command_line '/etc/do_different_stuff'
-            end
-    EOF
+        # act + assert
+        resource = @chef_run.find_resource('naemon_service', 'the service')
+        expect(resource.rendered_service).to eq(<<EOF
+define service {
+  service_description the service
+  host_name host2
+  check_command the_command2
 
-    # act + assert
 
-    expect(@chef_run).to render_file('/etc/naemon/commands.cfg').with_content(
-                             <<EOF
-define command {
-  command_name the_command 1
-  command_line /etc/do_stuff
-}
+  _DB_TO_CHECK someDbName
 
-define command {
-  command_name the_command 2
-  command_line /etc/do_different_stuff
 }
 EOF
-                                         )
+                                             )
+  end
+
+  it 'works properly when multiple variables are supplied' do
+    # arrange
+            temp_lwrp_recipe contents: <<-EOF
+                naemon_service 'the service' do
+                  host 'host2'
+                  check_command 'the_command2'
+                  variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
+                end
+            EOF
+
+            # act + assert
+            resource = @chef_run.find_resource('naemon_service', 'the service')
+            expect(resource.rendered_service).to eq(<<EOF
+define service {
+  service_description the service
+  host_name host2
+  check_command the_command2
+
+
+  _DB_TO_CHECK someDbName
+
+  _IPTOCHECK 172.16.0.1
+
+}
+EOF
+                                                 )
+  end
+
+  it 'works properly when variables and service groups are supplied' do
+    # arrange
+                temp_lwrp_recipe contents: <<-EOF
+                    naemon_service 'the service' do
+                      host 'host2'
+                      check_command 'the_command2'
+                      variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
+                      service_groups ['group2', 'group1']
+                    end
+                EOF
+
+                # act + assert
+                resource = @chef_run.find_resource('naemon_service', 'the service')
+                expect(resource.rendered_service).to eq(<<EOF
+define service {
+  service_description the service
+  host_name host2
+  check_command the_command2
+
+  servicegroups group2,group1
+
+
+  _DB_TO_CHECK someDbName
+
+  _IPTOCHECK 172.16.0.1
+
+}
+EOF
+                                                     )
   end
 end

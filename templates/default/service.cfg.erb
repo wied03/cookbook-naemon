@@ -5,4 +5,7 @@ define service {
 <% if [*service_groups].any? %>
   servicegroups <%=[*service_groups].join(',')%>
 <% end %>
+<% (variables || {}).each do |k,v| %>
+  <%=k%> <%=v%>
+<% end%>
 }
