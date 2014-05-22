@@ -242,15 +242,6 @@ describe 'naemon::lwrp:role' do
     service.hosts.should == ['host1.stuff.com', 'host2.stuff.com']
   end
 
-  it 'complains if we use the same service name twice' do
-    # arrange
-
-    # act
-
-    # assert
-    pending 'Write this test'
-  end
-
   it 'works properly with 1 host in 2 different roles with 2 services' do
     # arrange
     node1 = {
