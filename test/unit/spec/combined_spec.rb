@@ -34,16 +34,26 @@ describe 'naemon::lwrp:combined' do
                 end
 
                 naemon_role 'db' do
-                  service 'naemon svc desc' do
+                  service 'the service' do
                     check_command 'the_command2'
                   end
                 end
 
-                naemon_command 'application' do
+                # Have to manually trigger apply with Chefspec
+
+                naemon_role 'apply it' do
                   action :apply
                 end
 
-                naemon_role 'apply it' do
+                naemon_host 'hostapply' do
+                  action :apply
+                end
+
+                naemon_service 'svcapply' do
+                  action :apply
+                end
+
+                naemon_command 'application' do
                   action :apply
                 end
     EOF
@@ -72,7 +82,5 @@ define host {
 }
 EOF
                                          )
-
-    pending 'Write this test'
   end
 end

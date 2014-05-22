@@ -6,17 +6,13 @@ use_inline_resources
 include BswTech::DelayedApply
 
 action :create_or_update do
-  handle_delayed_apply('naemon_role') { |chef|
-    chef.naemon_role 'apply' do
-      action :nothing
-    end
-  }
+  trigger_delayed_apply
 end
 
 action :apply do
   already_created_hosts = []
   already_created_services = []
-  node.run_state[:naemon].each do |role_resource|
+  deferred_resources.each do |role_resource|
     each_role_query = [*role_resource.roles].map { |r| "role:#{r}" }
     search_query = each_role_query.join ' or '
     monitor_hosts = search(:node, search_query)

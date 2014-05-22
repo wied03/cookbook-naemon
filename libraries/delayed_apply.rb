@@ -1,15 +1,22 @@
 module BswTech
   module DelayedApply
-    # TODO: Ssee if there is a smarter way to both reuse code and store these resources in the runstate by lwrp.  We probably could also avoid even passing in the LWRP name since we're in a class that's specific to the lwrp
-    def handle_delayed_apply(lwrp)
-      node.run_state[:naemon] ||= []
-      node.run_state[:naemon] << new_resource
-      key = "#{lwrp}_apply"
-      if !node.run_state[key]
-        resource = yield self
-        node.run_state[key] = true
+    def trigger_delayed_apply
+      cookbook_run_state = node.run_state[:naemon] ||= {}
+      lwrp_name = new_resource.resource_name
+      for_this_lwrp = cookbook_run_state[lwrp_name] ||= []
+      first_one = for_this_lwrp.empty?
+      for_this_lwrp << new_resource
+      if first_one
+        # equivalent to running naemon_command 'apply'
+        resource = self.send(lwrp_name.to_s,'apply') do
+          action :nothing
+        end
         new_resource.notifies :apply, resource, :delayed
       end
+    end
+
+    def deferred_resources
+      node.run_state[:naemon][new_resource.resource_name]
     end
   end
 end
