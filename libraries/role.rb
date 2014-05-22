@@ -24,6 +24,10 @@ class Chef
       def service(service_name, &proc)
         @services[service_name] = proc
       end
+
+      def service_ref(service)
+        @services[service.description] = service
+      end
     end
   end
 end

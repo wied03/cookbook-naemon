@@ -184,7 +184,7 @@ describe 'naemon::lwrp:role' do
     svc_resource_2.hosts.should == ['host2.stuff.com']
   end
 
-  it 'works properly when we apply the same service twice to 2 different role groups in 2 separate role resource declarations' do
+  it 'works properly when we apply the same service twice to 2 different role groups with the same host in 2 separate role resource declarations' do
     # arrange
     stub_search(:node, 'role:db')
     .and_return([{
@@ -192,15 +192,16 @@ describe 'naemon::lwrp:role' do
                      ipaddress: '172.16.0.1'
                  }])
     setup_recipe contents: <<-EOF
-          naemon_role 'db' do
-            service 'apache' do
-              check_command 'the_command2'
-            end
+          svc = naemon_service 'apache' do
+            check_command 'the_command2'
           end
 
           naemon_role 'db' do
-            service 'apache' do
-            end
+            service_ref svc
+          end
+
+          naemon_role 'db' do
+            service_ref svc
           end
     EOF
 
@@ -211,6 +212,51 @@ describe 'naemon::lwrp:role' do
     service_resources.should have(1).items
     service = service_resources[0]
     service.check_command.should == 'the_command2'
+    service.hosts.should == ['host1.stuff.com']
+  end
+
+  it 'works properly when we apply the same service twice to 2 different role groups with different hosts in 2 separate role resource declarations' do
+    # arrange
+    stub_search(:node, 'role:db')
+    .and_return([{
+                     fqdn: 'host1.stuff.com',
+                     ipaddress: '172.16.0.1'
+                 }])
+    stub_search(:node, 'role:web')
+    .and_return([{
+                     fqdn: 'host2.stuff.com',
+                     ipaddress: '172.16.0.2'
+                 }])
+    setup_recipe contents: <<-EOF
+            svc = naemon_service 'apache' do
+              check_command 'the_command2'
+            end
+
+            naemon_role 'db' do
+              service_ref svc
+            end
+
+            naemon_role 'web' do
+              service_ref svc
+            end
+    EOF
+
+    # act + assert
+    host_resources = @chef_run.find_resources 'naemon_host'
+    host_resources.should have(2).items
+    service_resources = @chef_run.find_resources 'naemon_service'
+    service_resources.should have(1).items
+    service = service_resources[0]
+    service.check_command.should == 'the_command2'
+    service.hosts.should == ['host1.stuff.com', 'host2.stuff.com']
+  end
+
+  it 'complains if we use the same service name twice' do
+    # arrange
+
+    # act
+
+    # assert
     pending 'Write this test'
   end
 
