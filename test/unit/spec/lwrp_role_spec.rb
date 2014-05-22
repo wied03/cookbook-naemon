@@ -21,15 +21,6 @@ describe 'naemon::lwrp:role' do
     'role'
   end
 
-  def setup_recipe(contents:)
-    temp_lwrp_recipe contents: contents + <<-EOF
-        # Simulate an immediate apply in order to test the template
-        naemon_role 'apply it' do
-          action :apply
-        end
-    EOF
-  end
-
   it 'sets up the template to be done at the end of the chef run' do
     # assert
     stub_search(:node, 'role:db')
@@ -57,7 +48,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
         naemon_role 'db' do
           service 'naemon svc desc' do
             check_command 'the_command2'
@@ -87,7 +78,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
             naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
@@ -120,7 +111,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
                 naemon_role ['db', 'web'] do
                   service 'naemon svc desc' do
                     check_command 'the_command2'
@@ -151,7 +142,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
             naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
@@ -191,7 +182,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
           svc = naemon_service 'apache' do
             check_command 'the_command2'
           end
@@ -227,7 +218,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
             svc = naemon_service 'apache' do
               check_command 'the_command2'
             end
@@ -268,7 +259,7 @@ describe 'naemon::lwrp:role' do
     }
     stub_search(:node, 'role:db').and_return([node1])
     stub_search(:node, 'role:web').and_return([node1])
-    setup_recipe contents: <<-EOF
+    temp_lwrp_recipe contents: <<-EOF
                     naemon_role 'db' do
                       service 'naemon svc desc' do
                         check_command 'the_command2'
