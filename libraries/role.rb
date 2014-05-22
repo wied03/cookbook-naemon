@@ -18,7 +18,7 @@ class Chef
 
       # TODO: See if we can merge roles and name and use an array for the name, maybe flatten the array and assign flat to @name and the array to @roles
       def roles(arg=nil)
-        set_or_return(:roles, arg, :kind_of => String)
+        set_or_return(:roles, arg, :kind_of => [String,Array])
       end
 
       def service(service_name, &proc)

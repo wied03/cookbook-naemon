@@ -34,7 +34,7 @@ describe 'naemon::lwrp:service' do
     # assert
     temp_lwrp_recipe contents: <<-EOF
         naemon_service 'the service' do
-          host 'host2'
+          hosts 'host2'
           check_command 'the_command2'
         end
     EOF
@@ -48,7 +48,7 @@ describe 'naemon::lwrp:service' do
     # arrange
     setup_recipe contents: <<-EOF
         naemon_service 'the service' do
-          host 'host2'
+          hosts 'host2'
           check_command 'the_command2'
         end
     EOF
@@ -68,7 +68,7 @@ EOF
     # arrange
     setup_recipe contents: <<-EOF
             naemon_service 'the service' do
-              host 'host2'
+              hosts 'host2'
               check_command 'the_command2'
               service_groups 'group1'
             end
@@ -90,7 +90,7 @@ EOF
     # arrange
     setup_recipe contents: <<-EOF
                 naemon_service 'the service' do
-                  host 'host2'
+                  hosts 'host2'
                   check_command 'the_command2'
                   check_interval 44
                 end
@@ -108,11 +108,31 @@ EOF
                                          )
   end
 
+  it 'works properly with multiple hosts on a service' do
+    # arrange
+    setup_recipe contents: <<-EOF
+              naemon_service 'the service' do
+                hosts ['host2', 'host3']
+                check_command 'the_command2'
+              end
+        EOF
+
+    # act + assert
+        expect(@chef_run).to render_file('/etc/naemon/conf.d/services.cfg').with_content(<<EOF
+define service {
+  service_description the service
+  host_name host2,host3
+  check_command the_command2
+}
+EOF
+                                             )
+  end
+
   it 'works properly when a member of multiple service groups' do
     # arrange
     setup_recipe contents: <<-EOF
                 naemon_service 'the service' do
-                  host 'host2'
+                  hosts 'host2'
                   check_command 'the_command2'
                   service_groups ['group2', 'group1']
                 end
@@ -134,7 +154,7 @@ EOF
     # arrange
     setup_recipe contents: <<-EOF
             naemon_service 'the service' do
-              host 'host2'
+              hosts 'host2'
               check_command 'the_command2'
               variables '_DB_TO_CHECK' => 'someDbName'
             end
@@ -156,7 +176,7 @@ EOF
     # arrange
     setup_recipe contents: <<-EOF
                 naemon_service 'the service' do
-                  host 'host2'
+                  hosts 'host2'
                   check_command 'the_command2'
                   variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
                 end
@@ -179,7 +199,7 @@ EOF
     # arrange
     setup_recipe contents: <<-EOF
                     naemon_service 'the service' do
-                      host 'host2'
+                      hosts 'host2'
                       check_command 'the_command2'
                       variables '_DB_TO_CHECK' => 'someDbName', '_IPTOCHECK' => '172.16.0.1'
                       service_groups ['group2', 'group1']

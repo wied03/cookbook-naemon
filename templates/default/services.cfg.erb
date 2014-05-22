@@ -1,7 +1,7 @@
 <% @resources.each do |r| %>
 define service {
   service_description <%=r.description%>
-  host_name <%=r.host%>
+  host_name <%=[*r.hosts].join(',')%>
   check_command <%=r.check_command%>
 <% if [*r.service_groups].any? %>
   servicegroups <%=[*r.service_groups].join(',')%>
