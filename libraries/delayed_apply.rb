@@ -13,6 +13,8 @@ module BswTech
         end
         new_resource.notifies :apply, resource, :delayed
       end
+      # Force this every time and just let the underlying resources decide whether they updated
+      new_resource.updated_by_last_action(true)
     end
 
     def deferred_resources
