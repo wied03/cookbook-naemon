@@ -6,8 +6,6 @@ use_inline_resources
 include BswTech::DelayedApply
 
 action :create_or_update do
-  node.run_state[:naemon] ||= []
-  node.run_state[:naemon] << new_resource
   handle_delayed_apply('naemon_command') { |chef|
     chef.naemon_command 'apply' do
       action :nothing
