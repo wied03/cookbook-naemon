@@ -29,8 +29,7 @@ describe 'naemon::lwrp:role' do
                      ipaddress: '172.16.0.1'
                  }])
     temp_lwrp_recipe contents: <<-EOF
-        naemon_role 'chef role blah' do
-          roles 'db'
+        naemon_role 'db' do
           service 'naemon svc desc' do
             check_command 'the_command2'
           end
@@ -69,8 +68,7 @@ describe 'naemon::lwrp:role' do
                      ipaddress: '172.16.0.2'
                  }])
     temp_lwrp_recipe contents: <<-EOF
-                naemon_role 'chef role blah' do
-                  roles ['db', 'web']
+                naemon_role ['db', 'web'] do
                   service 'naemon svc desc' do
                     check_command 'the_command2'
                   end
@@ -82,6 +80,10 @@ describe 'naemon::lwrp:role' do
     expect(svc_resource).to_not be_nil
     expect(svc_resource.check_command).to eq('the_command2')
     svc_resource.hosts.should == ['host1.stuff.com', 'host2.stuff.com']
+    host_resource_1 = @chef_run.find_resource('naemon_host', 'host1.stuff.com')
+    host_resource_1.should_not be_nil
+    host_resource_2 = @chef_run.find_resource('naemon_host', 'host2.stuff.com')
+    host_resource_2.should_not be_nil
   end
 
   it 'works properly with 2 hosts in 2 different roles with 2 services' do
@@ -97,15 +99,13 @@ describe 'naemon::lwrp:role' do
                      ipaddress: '172.16.0.2'
                  }])
     temp_lwrp_recipe contents: <<-EOF
-            naemon_role 'chef role blah' do
-              roles 'db'
+            naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
               end
             end
 
-            naemon_role 'the web role' do
-              roles 'web'
+            naemon_role 'web' do
               service 'apache' do
                 check_command 'apache_command'
               end

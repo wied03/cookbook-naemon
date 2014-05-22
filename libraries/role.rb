@@ -14,9 +14,9 @@ class Chef
         @action = :create_or_update
         @allowed_actions = [:create_or_update]
         @services = {}
+        @roles = name
       end
 
-      # TODO: See if we can merge roles and name and use an array for the name, maybe flatten the array and assign flat to @name and the array to @roles
       def roles(arg=nil)
         set_or_return(:roles, arg, :kind_of => [String,Array])
       end
