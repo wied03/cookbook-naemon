@@ -1,6 +1,8 @@
 <% @resources.each do |r| %>
 define host {
+  <% if r.alias %>
   alias <%=r.alias%>
+  <% end %>
   host_name <%=r.hostname%>
   address <%=r.address%>
 }

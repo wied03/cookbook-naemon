@@ -1,5 +1,6 @@
 require 'chef/resource'
 
+# Made this a real Ruby class to make nesting services within roles easier
 class Chef
   class Resource
     class NaemonRole < Chef::Resource
@@ -11,10 +12,11 @@ class Chef
         # Defined LWRP style
         @provider = Chef::Provider::NaemonRole
         @action = :create_or_update
-        @allowed_actions = [:create_or_update, :apply]
+        @allowed_actions = [:create_or_update]
         @services = {}
       end
 
+      # TODO: See if we can merge roles and name and use an array for the name, maybe flatten the array and assign flat to @name and the array to @roles
       def roles(arg=nil)
         set_or_return(:roles, arg, :kind_of => String)
       end

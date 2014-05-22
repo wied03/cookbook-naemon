@@ -44,11 +44,10 @@ describe 'naemon::lwrp:host' do
     expect(resource).to notify('naemon_host[apply]').to(:apply).delayed
   end
 
-  it 'works properly with 1 host' do
+  it 'works properly with 1 host with no alias' do
     # arrange
     setup_recipe contents: <<-EOF
-        naemon_host 'Main DB Server' do
-          hostname 'host2.stuff.com'
+        naemon_host 'host2.stuff.com' do
           address '172.16.0.1'
         end
     EOF
@@ -56,11 +55,28 @@ describe 'naemon::lwrp:host' do
     # act + assert
     expect(@chef_run).to render_file('/etc/naemon/conf.d/hosts.cfg').with_content(<<EOF
 define host {
-  alias Main DB Server
   host_name host2.stuff.com
   address 172.16.0.1
 }
 EOF
                                          )
+  end
+
+  it 'works properly with an alias' do
+    # arrange
+
+    # act
+
+    # assert
+    pending 'Write this test'
+  end
+
+  it 'works properly with multiple hosts' do
+    # arrange
+
+    # act
+
+    # assert
+    pending 'Write this test'
   end
 end
