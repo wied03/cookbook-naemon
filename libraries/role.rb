@@ -12,7 +12,7 @@ class Chef
         # Defined LWRP style
         @provider = Chef::Provider::NaemonRole
         @action = :create_or_update
-        @allowed_actions = [:create_or_update]
+        @allowed_actions = [:create_or_update, :apply, :nothing]
         @services = {}
         @roles = name
       end
