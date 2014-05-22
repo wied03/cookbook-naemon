@@ -186,10 +186,31 @@ describe 'naemon::lwrp:role' do
 
   it 'works properly when we apply the same service twice to 2 different role groups in 2 separate role resource declarations' do
     # arrange
+    stub_search(:node, 'role:db')
+    .and_return([{
+                     fqdn: 'host1.stuff.com',
+                     ipaddress: '172.16.0.1'
+                 }])
+    setup_recipe contents: <<-EOF
+          naemon_role 'db' do
+            service 'apache' do
+              check_command 'the_command2'
+            end
+          end
 
-    # act
+          naemon_role 'db' do
+            service 'apache' do
+            end
+          end
+    EOF
 
-    # assert
+    # act + assert
+    host_resources = @chef_run.find_resources 'naemon_host'
+    host_resources.should have(1).items
+    service_resources = @chef_run.find_resources 'naemon_service'
+    service_resources.should have(1).items
+    service = service_resources[0]
+    service.check_command.should == 'the_command2'
     pending 'Write this test'
   end
 

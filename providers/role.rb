@@ -17,14 +17,18 @@ end
 
 action :apply do
   already_created_hosts = []
+  already_created_services = []
   node.run_state[:naemon].each do |role_resource|
     each_role_query = [*role_resource.roles].map { |r| "role:#{r}" }
     search_query = each_role_query.join ' or '
     monitor_hosts = search(:node, search_query)
     role_resource.services.each do |svc_name, proc|
-      naemon_service svc_name do
-        hosts monitor_hosts.map { |h| h['fqdn'] }
-        instance_eval(&proc)
+      if !already_created_services.include? svc_name
+        naemon_service svc_name do
+          hosts monitor_hosts.map { |h| h['fqdn'] }
+          instance_eval(&proc)
+        end
+        already_created_services << svc_name
       end
     end
     monitor_hosts.each do |monitor_host|
