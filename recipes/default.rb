@@ -24,5 +24,4 @@
 #   subscribes :restart, 'template[/etc/naemon/conf.d/hosts.cfg]', :delayed
 # end
 
-#TODO: See if Chef has any approaches to rollback or do you have to copy files to a temp directory?
 #TODO: Incorporate packages, service setup, username/password setup for Apache
