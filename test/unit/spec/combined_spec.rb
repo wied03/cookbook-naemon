@@ -28,7 +28,7 @@ describe 'naemon::lwrp:combined' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
                 naemon_command 'the_command2' do
                   command_line '/etc/do_stuff'
                 end

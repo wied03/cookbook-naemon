@@ -21,8 +21,8 @@ describe 'naemon::lwrp:service' do
     'service'
   end
 
-  def setup_recipe(contents:)
-    temp_lwrp_recipe contents: contents + <<-EOF
+  def setup_recipe(contents)
+    temp_lwrp_recipe  contents + <<-EOF
       # Simulate an immediate apply in order to test the template
       naemon_service 'application' do
         action :apply
@@ -32,7 +32,7 @@ describe 'naemon::lwrp:service' do
 
   it 'sets up the template to be done at the end of the chef run' do
     # assert
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
         naemon_service 'the service' do
           hosts 'host2'
           check_command 'the_command2'
@@ -46,7 +46,7 @@ describe 'naemon::lwrp:service' do
 
   it 'works properly with 1 service' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
         naemon_service 'the service' do
           hosts 'host2'
           check_command 'the_command2'
@@ -66,7 +66,7 @@ EOF
 
   it 'works properly when a member of a service group' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
             naemon_service 'the service' do
               hosts 'host2'
               check_command 'the_command2'
@@ -88,7 +88,7 @@ EOF
 
   it 'works properly when a check interval is supplied' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
                 naemon_service 'the service' do
                   hosts 'host2'
                   check_command 'the_command2'
@@ -110,7 +110,7 @@ EOF
 
   it 'works properly with multiple hosts on a service' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
               naemon_service 'the service' do
                 hosts ['host2', 'host3']
                 check_command 'the_command2'
@@ -130,7 +130,7 @@ EOF
 
   it 'works properly when a member of multiple service groups' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
                 naemon_service 'the service' do
                   hosts 'host2'
                   check_command 'the_command2'
@@ -152,7 +152,7 @@ EOF
 
   it 'works properly when 1 variable is supplied' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
             naemon_service 'the service' do
               hosts 'host2'
               check_command 'the_command2'
@@ -174,7 +174,7 @@ EOF
 
   it 'works properly when multiple variables are supplied' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
                 naemon_service 'the service' do
                   hosts 'host2'
                   check_command 'the_command2'
@@ -197,7 +197,7 @@ EOF
 
   it 'works properly when variables and service groups are supplied' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
                     naemon_service 'the service' do
                       hosts 'host2'
                       check_command 'the_command2'

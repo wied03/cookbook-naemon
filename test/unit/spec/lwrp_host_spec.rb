@@ -21,8 +21,8 @@ describe 'naemon::lwrp:host' do
     'host'
   end
 
-  def setup_recipe(contents:)
-    temp_lwrp_recipe contents: contents + <<-EOF
+  def setup_recipe(contents)
+    temp_lwrp_recipe contents + <<-EOF
       # Simulate an immediate apply in order to test the template
       naemon_host 'application' do
         action :apply
@@ -32,7 +32,7 @@ describe 'naemon::lwrp:host' do
 
   it 'sets up the template to be done at the end of the chef run' do
     # assert
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
         naemon_host 'host2.stuff.com' do
           address '172.16.0.1'
         end
@@ -45,7 +45,7 @@ describe 'naemon::lwrp:host' do
 
   it 'works properly with 1 host with no alias' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
         naemon_host 'host2.stuff.com' do
           address '172.16.0.1'
         end
@@ -63,7 +63,7 @@ EOF
 
   it 'works properly with an alias' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
             naemon_host 'host2.stuff.com' do
               host_alias 'the key host'
               address '172.16.0.1'
@@ -83,7 +83,7 @@ EOF
 
   it 'works properly with multiple hosts' do
     # arrange
-    setup_recipe contents: <<-EOF
+    setup_recipe  <<-EOF
                 naemon_host 'host2.stuff.com' do
                   address '172.16.0.1'
                 end

@@ -28,7 +28,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
             naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
@@ -48,7 +48,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
         naemon_role 'db' do
           service 'naemon svc desc' do
             check_command 'the_command2'
@@ -78,7 +78,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
             naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
@@ -111,7 +111,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
                 naemon_role ['db', 'web'] do
                   service 'naemon svc desc' do
                     check_command 'the_command2'
@@ -142,7 +142,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
             naemon_role 'db' do
               service 'naemon svc desc' do
                 check_command 'the_command2'
@@ -182,7 +182,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host1.stuff.com',
                      ipaddress: '172.16.0.1'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
           svc = naemon_service 'apache' do
             check_command 'the_command2'
           end
@@ -218,7 +218,7 @@ describe 'naemon::lwrp:role' do
                      fqdn: 'host2.stuff.com',
                      ipaddress: '172.16.0.2'
                  }])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
             svc = naemon_service 'apache' do
               check_command 'the_command2'
             end
@@ -250,7 +250,7 @@ describe 'naemon::lwrp:role' do
     }
     stub_search(:node, 'role:db').and_return([node1])
     stub_search(:node, 'role:web').and_return([node1])
-    temp_lwrp_recipe contents: <<-EOF
+    temp_lwrp_recipe  <<-EOF
                     naemon_role 'db' do
                       service 'naemon svc desc' do
                         check_command 'the_command2'
